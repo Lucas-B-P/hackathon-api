@@ -1,0 +1,24 @@
+{
+  "name": "patinhas-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "db:migrate": "node src/database/migrate.js",
+    "test": "node --test test/app.test.js test/integration/health.test.js test/modules/auth/auth.test.js test/modules/clientes/clientes.test.js test/modules/pets/pets.test.js test/modules/produtos/produtos.test.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "jsonwebtoken": "^9.0.2"
+    ,"nodemailer": "^7.0.6"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.4"
+  }
+}
