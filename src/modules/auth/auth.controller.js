@@ -1,4 +1,5 @@
 import { getCurrentUser, login, register, requestPasswordReset } from "./auth.service.js";
+import { decryptIncomingSensitiveFields } from "../../utils/sensitiveFields.js";
 
 export async function loginController(request, response, next) {
   try {
@@ -28,13 +29,33 @@ export async function meController(request, response, next) {
 
 export async function registerController(request, response, next) {
   try {
-    const { nome, email, senha } = request.body;
+    const payload = decryptIncomingSensitiveFields(request.body);
+    const { nome, email, senha, cpf, telefone, nascimento } = payload;
     if (!nome || !email || !senha || senha.length < 6) {
       return response.status(400).json({
         error: { code: "VALIDATION_ERROR", message: "nome, email e senha com no mínimo 6 caracteres são obrigatórios" },
       });
     }
-    return response.status(201).json(await register({ name: nome, email, password: senha }));
+    if (!cpf || !telefone || !nascimento) {
+      return response.status(400).json({
+        error: { code: "VALIDATION_ERROR", message: "cpf, telefone e data de nascimento são obrigatórios" },
+      });
+    }
+    if (Number.isNaN(Date.parse(nascimento))) {
+      return response.status(400).json({
+        error: { code: "VALIDATION_ERROR", message: "data de nascimento inválida" },
+      });
+    }
+    return response.status(201).json(
+      await register({
+        name: nome.trim(),
+        email,
+        password: senha,
+        cpf: String(cpf).trim(),
+        phone: String(telefone).trim(),
+        birthDate: nascimento,
+      }),
+    );
   } catch (error) {
     return next(error);
   }

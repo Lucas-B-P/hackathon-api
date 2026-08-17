@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import nodemailer from "nodemailer";
 import { env } from "../../config/env.js";
 import { pool } from "../../database/pool.js";
+import { encryptProfileForStorage } from "../../utils/sensitiveFields.js";
 
 function createToken(user) {
   return jwt.sign(
@@ -32,14 +33,15 @@ export async function login({ email, password }) {
   };
 }
 
-export async function register({ name, email, password }) {
+export async function register({ name, email, password, cpf, phone, birthDate }) {
   const passwordHash = await bcrypt.hash(password, 12);
+  const sensitive = encryptProfileForStorage({ cpf, phone, birth_date: birthDate });
   try {
     const result = await pool.query(
-      `INSERT INTO users (name, email, password_hash, role)
-       VALUES ($1, LOWER($2), $3, 'cliente')
+      `INSERT INTO users (name, email, password_hash, role, cpf, phone, birth_date)
+       VALUES ($1, LOWER($2), $3, 'cliente', $4, $5, $6)
        RETURNING id, name, email, role`,
-      [name, email, passwordHash],
+      [name, email, passwordHash, sensitive.cpf, sensitive.phone, sensitive.birth_date],
     );
     const user = result.rows[0];
     return {

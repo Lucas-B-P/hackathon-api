@@ -10,6 +10,7 @@ export const env = {
     .split(",")
     .map((origin) => origin.trim()),
   jwtSecret: process.env.JWT_SECRET,
+  sensitiveDataKey: process.env.SENSITIVE_DATA_KEY,
   smtp: {
     host: process.env.SMTP_HOST,
     port: Number(required("SMTP_PORT", "587")),
