@@ -4,7 +4,7 @@ import path from "node:path";
 import { pool } from "./pool.js";
 
 const migrationsDir = path.dirname(fileURLToPath(import.meta.url));
-const migrationFiles = ["001_initial.sql", "002_auth.sql"];
+const migrationFiles = ["001_initial.sql", "002_auth.sql", "003_profile.sql", "004_pets.sql"];
 
 try {
   const client = await pool.connect();

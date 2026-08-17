@@ -6,6 +6,7 @@ import { pool } from "./database/pool.js";
 import clientesRoutes from "./modules/clientes/clientes.routes.js";
 import petsRoutes from "./modules/pets/pets.routes.js";
 import produtosRoutes from "./modules/produtos/produtos.routes.js";
+import profileRoutes from "./modules/auth/profile.routes.js";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
 export const app = express();
@@ -29,8 +30,10 @@ app.get("/health", async (_request, response, next) => {
   }
 });
 app.use("/auth", authRoutes);
+app.use("/portal/perfil", profileRoutes);
 app.use("/admin/clientes", clientesRoutes);
 app.use("/admin/pets", petsRoutes);
+app.use("/portal/pets", petsRoutes);
 app.use("/admin/produtos", produtosRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
