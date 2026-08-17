@@ -1,3 +1,4 @@
-export async function listProdutos() {
-  return [];
-}
+import { pool } from "../../database/pool.js";
+export async function listStoreProducts(query = {}) { const values = []; const filters = ["active = TRUE", "stock > 0"]; if (query.q) { values.push(`%${query.q}%`); filters.push(`(name ILIKE $${values.length} OR sku ILIKE $${values.length})`); } if (query.categoria) { values.push(query.categoria); filters.push(`category = $${values.length}`); } const result = await pool.query(`SELECT id, name, sku, category, stock, sale_price, icon, image_url FROM products WHERE ${filters.join(" AND ")} ORDER BY name`, values); return result.rows; }
+export async function listCategories() { const result = await pool.query("SELECT DISTINCT category FROM products WHERE active = TRUE ORDER BY category"); return result.rows.map((row) => row.category); }
+export async function getStoreProduct(id) { const result = await pool.query("SELECT id, name, sku, category, stock, sale_price, icon, image_url FROM products WHERE id = $1 AND active = TRUE", [id]); return result.rows[0]; }

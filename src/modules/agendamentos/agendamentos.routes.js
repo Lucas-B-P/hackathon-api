@@ -1,0 +1,11 @@
+import { Router } from "express";
+import { requireAuth } from "../../middlewares/auth.js";
+import * as controller from "./agendamentos.controller.js";
+const router = Router();
+router.use(requireAuth);
+router.get("/servicos", controller.services);
+router.get("/agendamentos/horarios-disponiveis", controller.times);
+router.get("/agendamentos", controller.list);
+router.post("/agendamentos", controller.create);
+router.post("/agendamentos/:id/cancelar", controller.cancel);
+export default router;
