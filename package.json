@@ -7,7 +7,9 @@
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
     "db:migrate": "node src/database/migrate.js",
-    "test": "node --test test/app.test.js test/integration/health.test.js test/modules/auth/auth.test.js test/modules/clientes/clientes.test.js test/modules/pets/pets.test.js test/modules/produtos/produtos.test.js"
+    "test": "node --test test/app.test.js test/integration/health.test.js test/modules/auth/auth.test.js test/modules/clientes/clientes.test.js test/modules/pets/pets.test.js test/modules/produtos/produtos.test.js",
+    "format": "..\\web\\node_modules\\.bin\\oxfmt.cmd src",
+    "format:check": "..\\web\\node_modules\\.bin\\oxfmt.cmd --check src"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -15,8 +17,7 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^9.0.5",
-    "pg": "^8.16.3"
+    "nodemailer": "^9.0.5"
   },
   "devDependencies": {
     "supertest": "^7.1.4"
