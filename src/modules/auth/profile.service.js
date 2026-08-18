@@ -46,7 +46,7 @@ export async function createAddress(userId, data) {
   const result = await pool.query(
     `INSERT INTO user_addresses (user_id, label, street, number, complement, neighborhood, city, state, zip_code, is_primary)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
-    [userId, data.rotulo, data.logradouro, data.numero, data.complemento, data.bairro, data.cidade, data.uf, data.cep, data.principal ?? false],
+    [userId, data.rotulo ?? null, data.logradouro ?? null, data.numero ?? null, data.complemento ?? null, data.bairro ?? null, data.cidade ?? null, data.uf ?? null, data.cep ?? null, data.principal ? 1 : 0],
   );
   return result.rows[0];
 }
@@ -58,7 +58,7 @@ export async function deleteAddress(userId, addressId) {
 export async function updateAddress(userId, addressId, data) {
   const result = await pool.query(
     `UPDATE user_addresses SET label = COALESCE($1, label), street = COALESCE($2, street), number = COALESCE($3, number), complement = COALESCE($4, complement), neighborhood = COALESCE($5, neighborhood), city = COALESCE($6, city), state = COALESCE($7, state), zip_code = COALESCE($8, zip_code), is_primary = COALESCE($9, is_primary), updated_at = NOW() WHERE id = $10 AND user_id = $11 RETURNING *`,
-    [data.rotulo, data.logradouro, data.numero, data.complemento, data.bairro, data.cidade, data.uf, data.cep, data.principal, addressId, userId],
+    [data.rotulo ?? null, data.logradouro ?? null, data.numero ?? null, data.complemento ?? null, data.bairro ?? null, data.cidade ?? null, data.uf ?? null, data.cep ?? null, data.principal === undefined ? null : (data.principal ? 1 : 0), addressId, userId],
   );
   return result.rows[0];
 }
